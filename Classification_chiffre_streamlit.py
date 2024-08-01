@@ -1,9 +1,9 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-import cv2
 from keras.models import load_model
 from streamlit_drawable_canvas import st_canvas
+from PIL import Image
 
 # Charger le modèle pré-entraîné
 model = load_model('cnn_modele.h5')
@@ -19,10 +19,19 @@ def predict_random_image(X_test):
 
 # Fonction pour prédire le chiffre dessiné
 def predict_drawn_image(drawn_image):
-    drawn_image = cv2.resize(drawn_image, (28, 28))
-    drawn_image = cv2.cvtColor(drawn_image, cv2.COLOR_BGR2GRAY)
-    drawn_image = drawn_image.reshape(1, 28, 28, 1)
-    drawn_image = drawn_image / 255.0
+    # Convertir l'image dessinée en un objet Image de Pillow
+    drawn_image_pil = Image.fromarray((drawn_image * 255).astype('uint8'))
+
+    # Redimensionner l'image à 28x28
+    drawn_image_pil = drawn_image_pil.resize((28, 28))
+
+    # Convertir en niveaux de gris
+    drawn_image_pil = drawn_image_pil.convert('L')
+
+    # Convertir en numpy array et normaliser
+    drawn_image = np.array(drawn_image_pil).reshape(1, 28, 28, 1) / 255.0
+
+    # Prédire avec le modèle
     prediction = model.predict(drawn_image)
     predicted_digit = np.argmax(prediction)
     return predicted_digit, prediction
@@ -182,11 +191,3 @@ elif option == "Monitoring":
             st.write(f"Taux d'échec des chiffres dessinés : {failure_rate_drawn:.2f}%")
         else:
             st.write("Aucune validation pour les chiffres dessinés effectuée pour le moment.")
-
-    with tab3:
-        st.subheader("Historique des Prédictions")
-        if st.session_state.predictions:
-            predictions_df = pd.DataFrame(st.session_state.predictions)
-            st.dataframe(predictions_df)
-        else:
-            st.write("Aucune prédiction effectuée pour le moment.")
