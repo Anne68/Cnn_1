@@ -243,13 +243,10 @@ elif option == "Diagramme":
 
     # Créer le graphique
     fig, ax = plt.subplots()
-    ax.plot(success_rates, types, marker='o', label='Images de Test')
-    ax.plot(success_rates, types, marker='o', label='Chiffres Dessinés')
-    ax.set_ylabel('Type')
-    ax.set_xlabel('Taux de Réussite (%)')
+    ax.bar(types, success_rates, color=['blue', 'green', 'red'])
+    ax.set_ylabel('Taux de Réussite (%)')
     ax.set_title('Taux de Réussite des Prédictions')
-    ax.set_xlim(0, 100)
-    ax.legend()
+    ax.set_ylim(0, 100)
 
     # Ajouter du design et des couleurs
     ax.grid(True, linestyle='--', alpha=0.7)
