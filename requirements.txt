@@ -1,6 +1,9 @@
-opencv-python
-streamlit
-opencv-python
-numpy
-pandas
-
+opencv-python==4.10.0.84
+streamlit==1.33.0
+streamlit-drawable-canvas==0.9.3
+streamlit-jupyter==0.2.1
+streamlit_folium==0.20.0
+numpy==1.26.4
+pandas==2.2.2
+pandas-gbq==0.17.9
+pandas-profiling==3.3.0
